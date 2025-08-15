@@ -1,5 +1,12 @@
 import { classificationNested } from "./versions/20230318"
-import type { ElementNested, ElementCodified } from "./types"
+import {ElementNested, ElementCodified, ClassificationPosition} from "./types"
+
+/**
+ * Check if a code exists in the classification
+ */
+export function isValid(code: string): boolean {
+  return code in classificationNested
+}
 
 /**
  * Get detailed information for a GICS code
@@ -34,8 +41,24 @@ export function getLevel(level:number = 1): Record<string, ElementNested> {
 }
 
 /**
- * Check if a code exists in the classification
+ * Break down a code into each position in a form of array
+ * @param code - gics code string
  */
-export function isValid(code: string): boolean {
-  return code in classificationNested
+
+export function getPositions(code: string): ClassificationPosition | null {
+  if (!isValid(code)) return null
+  const depth = code.length / 2 - 1
+  let cursor = 0
+  const levels: Array<ElementCodified> = []
+  while (cursor <= depth) {
+    const target = classificationNested[code.substring(0, (cursor + 1) * 2)]
+    levels.push({
+      code:target.code,
+      name: target.name,
+      ...(target.description && { description: target.description }),
+    })
+    cursor++
+  }
+  return levels
 }
+

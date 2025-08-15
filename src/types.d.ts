@@ -19,3 +19,5 @@ export type ClassificationPlain = {
 export type ClassificationNested = {
   [key: string]: ElementNested;
 }
+
+export type ClassificationPosition = Array<ElementCodified>

@@ -1,4 +1,4 @@
-import { getDetails, getDirectChildren, getParent, getLevel, isValid } from '../src'
+import { getDetails, getDirectChildren, getParent, getLevel, isValid, getPositions } from '../src'
 
 describe('GICS Helper Functions', () => {
   describe('getDetails', () => {
@@ -107,6 +107,81 @@ describe('GICS Helper Functions', () => {
     })
   })
 
+  describe('getPositions', () => {
+    it('should return null for invalid code', () => {
+      const result = getPositions('99')
+      expect(result).toBeNull()
+    })
+
+    it('should return array for valid sector code (2 digits)', () => {
+      const result = getPositions('10')
+      expect(Array.isArray(result)).toBe(true)
+      expect(result?.length).toBe(1)
+      expect(result?.[0]?.code).toBe('10')
+      expect(result?.[0]?.name).toBe('Energy')
+    })
+
+    it('should return array for valid industry group code (4 digits)', () => {
+      const result = getPositions('1010')
+      expect(Array.isArray(result)).toBe(true)
+      expect(result?.length).toBe(2)
+      expect(result?.[0]?.code).toBe('10')
+      expect(result?.[1]?.code).toBe('1010')
+    })
+
+    it('should return array for valid industry code (6 digits)', () => {
+      const result = getPositions('101010')
+      expect(Array.isArray(result)).toBe(true)
+      expect(result?.length).toBe(3)
+      expect(result?.[0]?.code).toBe('10')
+      expect(result?.[1]?.code).toBe('1010')
+      expect(result?.[2]?.code).toBe('101010')
+    })
+
+    it('should return array for valid sub-industry code (8 digits)', () => {
+      const result = getPositions('10101010')
+      expect(Array.isArray(result)).toBe(true)
+      expect(result?.length).toBe(4)
+      expect(result?.[0]?.code).toBe('10')
+      expect(result?.[1]?.code).toBe('1010')
+      expect(result?.[2]?.code).toBe('101010')
+      expect(result?.[3]?.code).toBe('10101010')
+    })
+
+    it('should include description when present', () => {
+      const result = getPositions('10')
+      expect(result?.[0]).toHaveProperty('name')
+      expect(result?.[0]).toHaveProperty('code')
+      // Description should only be included if it exists
+      if (result?.[0] && 'description' in result[0]) {
+        expect(typeof result[0].description).toBe('string')
+      }
+    })
+
+    it('should not include description when not present', () => {
+      // Test with a code that might not have description
+      const result = getPositions('10')
+      const element = result?.[0]
+      if (element && !('description' in element)) {
+        expect(element).not.toHaveProperty('description')
+      }
+    })
+
+    it('should return proper hierarchy for multi-level codes', () => {
+      const result = getPositions('101010')
+      expect(result?.length).toBe(3)
+      
+      // Each level should be progressively more specific
+      expect(result?.[0]?.code.length).toBe(2)
+      expect(result?.[1]?.code.length).toBe(4)
+      expect(result?.[2]?.code.length).toBe(6)
+      
+      // Each level should start with the previous level's code
+      expect(result?.[1]?.code).toMatch(/^10\d{2}$/)
+      expect(result?.[2]?.code).toMatch(/^1010\d{2}$/)
+    })
+  })
+
   describe('Integration tests', () => {
     it('should maintain parent-child relationships', () => {
       const energy = getDetails('10')
@@ -131,6 +206,20 @@ describe('GICS Helper Functions', () => {
           expect(parentExists).toBe(true)
         }
       })
+    })
+
+    it('getPositions should be consistent with getDetails', () => {
+      const code = '101010'
+      const positions = getPositions(code)
+      const details = getDetails(code)
+      
+      expect(positions).toBeDefined()
+      expect(details).toBeDefined()
+      
+      // The last position should match the details
+      const lastPosition = positions?.[positions.length - 1]
+      expect(lastPosition?.code).toBe(details?.code)
+      expect(lastPosition?.name).toBe(details?.name)
     })
   })
 })

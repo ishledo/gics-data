@@ -20,6 +20,7 @@ import {
   getParent, 
   getLevel, 
   isValid,
+  getPositions,
   classificationNested 
 } from 'gics-data'
 
@@ -44,6 +45,10 @@ const sectors = getLevel(1) // All sectors
 const industryGroups = getLevel(2) // All industry groups
 const industries = getLevel(3) // All industries
 const subIndustries = getLevel(4) // All sub-industries
+
+// Get hierarchy breakdown of a GICS code
+const positions = getPositions('10101010')
+console.log(positions) // [{ code: '10', name: 'Energy' }, { code: '1010', name: 'Energy' }, ...]
 ```
 
 ## API Reference
@@ -69,6 +74,11 @@ Returns all GICS codes at a specific hierarchical level.
 - **Parameters:** `level` - 1 (sectors), 2 (industry groups), 3 (industries), 4 (sub-industries)
 - **Default:** 1
 - **Returns:** `Record<string, ElementNested>`
+
+### `getPositions(code: string)`
+Breaks down a GICS code into each hierarchical position as an array.
+- **Parameters:** `code` - The GICS code to break down
+- **Returns:** `Array<ElementCodified> | null` - Array containing each level from sector to the specified code, or null if invalid
 
 ### `classificationNested`
 The complete GICS classification data as a nested object structure.
@@ -97,6 +107,8 @@ export type ElementNested = ElementCodified & {
   parent?: ElementCodified
   children?: Record<string, ElementCodified>
 }
+
+export type ClassificationPosition = Array<ElementCodified>
 ```
 
 ## License

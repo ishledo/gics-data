@@ -4,7 +4,8 @@ export {
   getDirectChildren,
   getParent,
   getLevel,
-  isValid
+  isValid,
+  getPositions
 } from './helpers'
 
 // Re-export types for consumers
@@ -13,7 +14,8 @@ export type {
   ElementCodified,
   ElementNested,
   ClassificationPlain,
-  ClassificationNested
+  ClassificationNested,
+  ClassificationPosition
 } from './types'
 
 // Re-export data if needed
