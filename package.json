@@ -1,0 +1,21 @@
+{
+  "name": "gics-data",
+  "version": "1.0.0",
+  "description": "Modern library to parse, manipulate, and find GICS codes based on Global Industry Classification Standard by MSCI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gics",
+    "msci",
+    "industries",
+    "industry"
+  ],
+  "author": "Alec Vishmidt",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^9.33.0",
+    "typescript": "~5.8.3"
+  }
+}
