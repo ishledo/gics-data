@@ -1,0 +1,45 @@
+# Source files (only publish compiled lib/)
+src/
+test/
+examples/
+docs/
+
+# Development files
+tsconfig.json
+jest.config.js
+.eslintrc.*
+.prettierrc*
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Git files
+.git/
+.gitignore
+
+# CI/CD files
+.github/
+.travis.yml
+.circleci/
+
+# Coverage reports
+coverage/
+
+# Development dependencies cache
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generator scripts (internal use only)
+src/generators/
+
+# CLAUDE.md (project-specific instructions)
+CLAUDE.md

@@ -3,13 +3,20 @@
   "version": "1.0.0",
   "description": "Modern library to parse, manipulate, and find GICS codes based on Global Industry Classification Standard by MSCI.",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node lib/index.js",
     "dev": "tsc && node lib/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "prepublishOnly": "npm run build && npm test"
   },
   "keywords": [
     "gics",
@@ -19,6 +26,14 @@
   ],
   "author": "Alec Vishmidt <alec@bndigital.co> (https://github.com/ishledo)",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ishledo/gics-data.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ishledo/gics-data/issues"
+  },
+  "homepage": "https://github.com/ishledo/gics-data#readme",
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.0",
